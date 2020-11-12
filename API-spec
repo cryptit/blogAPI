@@ -1,0 +1,62 @@
+
+// USER OPERATIONS
+
+POST /register
+input: {username: ..., password: ..., bio: ...}
+
+POST /login
+input: {username:..., password: ... }
+	
+POST /update_credentials, auth required
+input: {"new_password": ... };
+
+
+AUTH REQUIRED FOR ALL BELOW OPERATIONS; Bearer token is extracted from Auth header of request body
+
+// PROFILE OPERATIONS
+
+POST /update_profile
+input: {new_bio: ...}
+	
+PUT /follow
+input: {user_to_follow: ... }
+
+PUT /unfollow
+input: {user_to_unfollow: ... }
+
+GET /show_my_profile
+input: empty body
+	
+GET /show_all_profiles
+input: empty body
+	
+GET /show_profile
+input: {"username": ... }
+	
+
+
+// ARTICLE TYPE OPERATIONS
+
+POST /create_article
+input: {title: ..., content: ...}
+
+POST /update_article
+input: {article_id: ..., new_title: ..., new_content: ...}
+	
+DELETE /delete_article
+input: {article_id: ...}
+	
+GET /list_articles_by_user
+input: {"username": ...}
+	
+GET /list_my_articles
+input: empty body
+
+GET /list_all_articles
+input: empty body
+
+GET /feed
+input: empty body
+
+
+
