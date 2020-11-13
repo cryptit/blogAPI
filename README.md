@@ -2,7 +2,7 @@
 To install dependencies, navigate into directory containing *package.json* and `npm install`
 
 ### blogAPI
-See API-spec
+See *API-spec*
 
 ### Create MySQL tables
 Change credentials in *dbconn.js*  
