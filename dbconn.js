@@ -1,5 +1,5 @@
 const {createPool} = require("mysql");
-
+//Pooling
 const pool = createPool({
     host     : 'localhost',
     user     : 'root',
