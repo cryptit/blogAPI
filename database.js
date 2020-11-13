@@ -1,4 +1,5 @@
 const dbconn = require('./dbconn');
+//For pooling
 
 function execQuery(sql, placeholderValues, callback) {
 	dbconn.query(sql, placeholderValues, callback);
