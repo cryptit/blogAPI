@@ -65,33 +65,55 @@ function unfollow(req, res) {
 
 async function showMyProfile(req, res) {
 	// input: empty body
-	let result = await getProfileByUsername(req.user.username);
-	res.json({username: result[0].username, bio: result[0].bio});
+	try {
+		let result = await getProfileByUsername(req.user.username);
+		res.json({username: result[0].username, bio: result[0].bio});
+	} catch (e) {
+		console.error('PROMISE REJECTION ERROR:', e);
+	}
 }
 
 async function showProfile(req, res) {
 	// {"username": ... } ; input format, profile to show
-	let result = await getProfileByUsername(req.body.username);
-	if (result.length !== 0)	
-			res.json({username: result[0].username, bio: result[0].bio});
-	else
-			res.status(404).send('No such user!');
+	try {
+		let result = await getProfileByUsername(req.body.username);
+		if (result.length !== 0)	
+				res.json({username: result[0].username, bio: result[0].bio});
+		else
+				res.status(404).send('No such user!');
+	} catch (e) {
+		console.error('PROMISE REJECTION ERROR:', e);
+	}
 }
 async function getProfileByUsername(username) {
 	
 	let resultPromise = execQuery2('SELECT username, bio FROM Users where username=?', [username]);
-	let result = await resultPromise;
-	return result;
+	try {
+		let result = await resultPromise;
+		return result;
+	} catch (e) {
+		console.error('PROMISE REJECTION ERROR:', e);
+	}
 }
 
 async function showAllProfiles(req, res) {
 	//input: empty body
 	let all_users = [];
 	let resultPromise = execQuery2('SELECT username, bio FROM Users', []);
-	let result = await resultPromise;
-	res.json(result);
+	try {
+		let result = await resultPromise;
+		res.json(result);
+	} catch (e) {
+		console.error('PROMISE REJECTION ERROR:', e);
+	}
 }
 
-module.exports = {follow, unfollow, update, showAllProfiles, 
-																							showMyProfile, showProfile};
+module.exports = {
+	follow,
+	unfollow,
+	update,
+	showAllProfiles,
+	showMyProfile,
+	showProfile
+};
 
