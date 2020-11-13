@@ -5,7 +5,7 @@ To install dependencies, navigate into directory containing *package.json* and `
 See API-spec
 
 ### Create MySQL tables
-Change credentials in *dbconn.js*
+Change credentials in *dbconn.js*  
 Log onto mysql terminal, then:
 ```
 create database blog;
