@@ -52,57 +52,84 @@ function deleteArticle(req, res) {
 
 async function getArticlesByUser(username) {			
 	let resultPromise = execQuery2('SELECT * FROM Articles where username=?', [username]);
-	let result = await resultPromise;
-	return result;
+	try {
+		let result = await resultPromise;
+		return result;
+	} catch (e) {
+		console.error('PROMISE REJECTION ERROR:', e);
+	}
 }
 
 async function listArticlesByUser(req, res) {
 	//input: {"username": ...}
-	let result = await getArticlesByUser(req.body.username);
-	res.json(result);
+	try {
+		let result = await getArticlesByUser(req.body.username);
+		res.json(result);
+	} catch (e) {
+		console.error('PROMISE REJECTION ERROR:', e);
+	}
 }
 
 async function listMyArticles(req, res) {
 	//input: empty
-	let result = await getArticlesByUser(req.user.username);
-	res.json(result);
+	try {
+		let result = await getArticlesByUser(req.user.username);
+		res.json(result);
+	} catch (e) {
+		console.error('PROMISE REJECTION ERROR:', e);
+	}
 }
 
 async function listAllArticles(req, res) {
 	//input: empty
-	let resultPromise = execQuery2('SELECT * FROM Articles', []);
-	let result = await resultPromise;
-	res.json(result);
+	try {
+		let resultPromise = execQuery2('SELECT * FROM Articles', []);
+		let result = await resultPromise;
+		res.json(result);
+	} catch (e) {
+		console.error('PROMISE REJECTION ERROR:', e);
+	}
 }
 
 
 async function myFeed(req, res) {
 
 	let resultPromise = execQuery2('SELECT B as username FROM AfollowsB where A=?', [req.user.username]);
-	let followingUsers = await resultPromise;
-	let feed = [];
-	for (user of followingUsers) {
-		let articlesForThisUser = await getArticlesByUser(user.username);
-		for (article of articlesForThisUser)
-			feed.push(article);
-	}
-	// sort into descending order by timestamp, so most recent article is on top of our feed
 	
-	feed.sort(function (item1, item2) {
-		return item2.timestamp - item1.timestamp; 
-	});
+	try {
+		let followingUsers = await resultPromise;
+		let feed = [];
+		for (user of followingUsers) {
+			let articlesForThisUser = await getArticlesByUser(user.username);
+			for (article of articlesForThisUser)
+				feed.push(article);
+		}
+		// sort into descending order by timestamp, so most recent article is on top of our feed
 	
-	for (article of feed) {
-		let dateObj = new Date(article.timestamp);			
-		let readableTimestamp = dateObj.toLocaleTimeString() + ", " + dateObj.getDate() + "/"
-									+ dateObj.getMonth() + "/" + dateObj.getFullYear();
-		article.timestamp = readableTimestamp;		
+		feed.sort(function (item1, item2) {
+			return item2.timestamp - item1.timestamp; 
+		});
+	
+		for (article of feed) {
+			let dateObj = new Date(article.timestamp);			
+			let readableTimestamp = dateObj.toLocaleTimeString() + ", " + dateObj.getDate() + "/"
+										+ dateObj.getMonth() + "/" + dateObj.getFullYear();
+			article.timestamp = readableTimestamp;		
+		}
+		res.json(feed);
+	} catch (e) {
+		console.error('PROMISE REJECTION ERROR:', e);
 	}
-	res.json(feed);
 }
 
 
-module.exports = {myFeed, createArticle, updateArticle, deleteArticle, 
-											listArticlesByUser, listMyArticles, listAllArticles};
-
+module.exports = {
+	myFeed,
+	createArticle,
+	updateArticle,
+	deleteArticle,
+	listArticlesByUser,
+	listMyArticles,
+	listAllArticles
+};
 
