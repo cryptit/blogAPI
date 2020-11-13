@@ -14,7 +14,6 @@ function update(req, res) {
 		}
 		res.status(201).send('Bio updated!');
 	});
-	
 }
 
 function follow(req, res) {
