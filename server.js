@@ -1,5 +1,4 @@
 const express = require('express')
-const jwt = require('jsonwebtoken')
 
 const auth = require('./auth')
 const user = require('./route_handlers/user')
